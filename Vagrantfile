@@ -30,7 +30,7 @@ Vagrant.configure("2") do |config|
   # to your host computer, it is cached for future use under the specified box name.
   config.vm.box = "ubuntu/trusty64"
 
-  config.vm.hostname = 'socialtracker'
+  config.vm.hostname = 'wordpressapp'
 
   # Local Machine Hosts
   if defined? VagrantPlugins::HostsUpdater
@@ -38,14 +38,14 @@ Vagrant.configure("2") do |config|
     # Parse through the vvv-hosts files in each of the found paths and put the hosts
     # that are found into a single array.
     hosts = []
-    hosts << 'www.socialtracker.local'
-    hosts << 'test.socialtracker.local'
+    hosts << 'www.wordpressapp.local'
+    hosts << 'test.wordpressapp.local'
     # Pass the final hosts array to the hostsupdate plugin so it can perform magic.
     config.hostsupdater.aliases = hosts
   end
 
   # Default Box IP Address
-  config.vm.network :private_network, ip: '192.168.50.20'
+  config.vm.network :private_network, ip: '192.168.50.30'
 
 
   # /srv/database/
@@ -73,10 +73,6 @@ Vagrant.configure("2") do |config|
     config.vm.synced_folder "www/", "/srv/www/", :owner => "www-data", :extra => 'dmode=775,fmode=774'
   end
 
-  # /srv/worker
-  config.vm.synced_folder "../worker.tracker.social/", "/srv/worker/"
-
-
   # Provisioning
   if File.exists?(File.join(vagrant_dir,'provision','provision-pre.sh')) then
     config.vm.provision :shell, :path => File.join( "provision", "provision-pre.sh" )
@@ -98,6 +94,5 @@ Vagrant.configure("2") do |config|
   if vagrant_version >= "1.6.0"
     config.vm.provision :shell, inline: "sudo service mysql restart", run: "always"
   end
-
 
 end
