@@ -1,0 +1,3 @@
+[submodule "wp-content/plugins/Restrict-Content-Pro"]
+	path = wp-content/plugins/Restrict-Content-Pro
+	url = git@github.com:pippinsplugins/Restrict-Content-Pro.git
