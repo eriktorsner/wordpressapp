@@ -1,0 +1,20 @@
+# just a few things we think you should add
+vendor
+
+# the local www folder is where we'll install WordPress, no need
+# to have that in git
+/www
+
+# vagrant state
+.vagrant
+
+# dev stuff
+*.sublime-project
+*.sublime-workspace
+node_modules
+secrets.json
+.rocketeer/logs
+localsettings.json
+build/
+
+
