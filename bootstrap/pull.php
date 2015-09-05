@@ -1,21 +1,32 @@
 <?php
-$localSettings = json_decode(file_get_contents(__DIR__.'/../localsettings.json'));
+define('BASEPATH', dirname(__DIR__));
+if (isset($argv[1]) && $argv[1] == 'test') {
+    define('TESTMODE', true);
+}
+require_once __DIR__."/src/Settings.php";
+$localSettings = new Settings();
 $bootstrapSettings = json_decode(file_get_contents(__DIR__.'/settings.json'));
 
 require_once $localSettings->wppath."/wp-load.php";
+require_once __DIR__."/src/Resolver.php";
 global $wpdb;
+$baseUrl = get_option('siteurl');
+$neutralUrl = 'NEUTRALURL';
 
 // pages
 foreach ($bootstrapSettings->pages as $page) {
     $pageId = $wpdb->get_var($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_name = %s", $page));
     $obj = get_post($pageId);
+    unset($obj->post_content);
     $obj->page_template_slug = basename(get_page_template_slug($pageId));
 
     $dir = __DIR__.'/pages/'.$page;
     @mkdir($dir, 0777, true);
+    Resolver::field_search_replace($obj, $baseUrl, $neutralUrl);
     file_put_contents($dir.'/meta', serialize($obj));
 
     $pageContent = $wpdb->get_var($wpdb->prepare("SELECT post_content FROM $wpdb->posts WHERE id = %s", $pageId));
+    Resolver::field_search_replace($pageContent, $baseUrl, $neutralUrl);
     file_put_contents($dir.'/content', $pageContent);
 }
 
@@ -35,6 +46,7 @@ foreach ($bootstrapSettings->menus as $menu) {
         $obj = get_post($menuItem->ID);
         $obj->postMeta = get_post_meta($obj->ID);
         $file = $dir.'/'.$menuItem->post_name;
+        Resolver::field_search_replace($obj, $baseUrl, $neutralUrl);
         file_put_contents($file, serialize($obj));
     }
 }

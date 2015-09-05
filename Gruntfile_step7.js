@@ -51,9 +51,12 @@ module.exports = function(grunt) {
 		pwd = shell.pwd();
 
 		// some standard plugins
-		shell.exec(wpcmd + 'plugin install --activate if-menu');
-		shell.exec(wpcmd + 'plugin install --activate baw-login-logout-menu');
-		shell.exec(wpcmd + 'plugin install --activate wp-cfm');
+		stdplugins = ['if-menu', 'baw-login-logout-menu', 'wp-cfm',
+					  'google-analyticator', 'wpmandrill'];
+		for(i=0;i<stdplugins.length;i++) {
+			name = stdplugins[i];		
+			shell.exec(wpcmd + 'plugin install --activate ' + name);
+		}
 
 		// our own theme(s)
 		themes = ['wordpressapp'];
@@ -66,7 +69,7 @@ module.exports = function(grunt) {
 
 
 		// our own, site-specific plugins
-		plugins = ['wordpressapp'];
+		plugins = ['wordpressapp', 'Restrict-Content-Pro'];
 		for(i=0;i<plugins.length;i++) {
 			name = plugins[i];
 			shell.exec('rm -f ' + ls.wppath + '/wp-content/plugins/' + name);

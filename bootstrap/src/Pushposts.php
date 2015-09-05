@@ -23,6 +23,9 @@ class Pushposts
             $this->posts[] = $newPost;
         }
 
+        $baseUrl = get_option('siteurl');
+        $neutralUrl = 'NEUTRALURL';
+        Resolver::field_search_replace($this->posts, $neutralUrl, $baseUrl);
         $this->process();
     }
 

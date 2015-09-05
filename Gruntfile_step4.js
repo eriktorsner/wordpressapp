@@ -94,7 +94,7 @@ module.exports = function(grunt) {
 		pwd = shell.pwd();
 
 		shell.mkdir('-p', ls.wppath + 'wp-content/config');
-
+		
 		src = pwd + '/bootstrap/wpbase_settings.json';
 		trg = ls.wppath + '/wp-content/config/wpbase_settings.json';
 		shell.cp('-f', src, trg);

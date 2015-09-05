@@ -30,6 +30,9 @@ class Pushmenus
             });
             $this->menus[] = $newMenu;
         }
+        $baseUrl = get_option('siteurl');
+        $neutralUrl = 'NEUTRALURL';
+        Resolver::field_search_replace($this->menus, $neutralUrl, $baseUrl);
         $this->process();
     }
 
@@ -63,7 +66,7 @@ class Pushmenus
         }
 
         foreach ($menu->items as &$objMenuItem) {
-            $newTarget = $this->findTarget($objMenuItem->meta->postMeta['_menu_item_object_id'][0]);
+            $newTarget = findTargetPostId($objMenuItem->meta->postMeta['_menu_item_object_id'][0]);
             $parentItem = $this->findMenuItem($objMenuItem->meta->postMeta['_menu_item_menu_item_parent'][0]);
 
             $args = [
@@ -89,20 +92,6 @@ class Pushmenus
                 update_post_meta($ret, $key, $val);
             }
         }
-    }
-
-    private function findTarget($target)
-    {
-        global $pages, $posts;
-        //$target = $menuItem->postMeta['_menu_item_object_id'][0];
-
-        foreach ($pages->posts as $page) {
-            if ($page->meta->ID == $target) {
-                return $page->id;
-            }
-        }
-
-        return 0;
     }
 
     private function findMenuItem($target)

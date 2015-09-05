@@ -66,7 +66,7 @@ module.exports = function(grunt) {
 
 
 		// our own, site-specific plugins
-		plugins = ['wordpressapp'];
+		plugins = ['wordpressapp', 'Restrict-Content-Pro'];
 		for(i=0;i<plugins.length;i++) {
 			name = plugins[i];
 			shell.exec('rm -f ' + ls.wppath + '/wp-content/plugins/' + name);
