@@ -97,7 +97,7 @@ module.exports = function(grunt) {
 		wpcmd = 'wp --path=' + ls.wppath + ' --allow-root ';
 		pwd = shell.pwd();
 
-		shell.mkdir('-p', ls.wppath + 'wp-content/config');
+		shell.mkdir('-p', ls.wppath + '/wp-content/config');
 
 		shell.exec('php ' + pwd + '/bootstrap/deneutralize.php wpbase_settings.json');
 		src = pwd + '/bootstrap/wpbase_settings.json';

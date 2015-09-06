@@ -93,7 +93,7 @@ module.exports = function(grunt) {
 		wpcmd = 'wp --path=' + ls.wppath + ' --allow-root ';
 		pwd = shell.pwd();
 
-		shell.mkdir('-p', ls.wppath + 'wp-content/config');
+		shell.mkdir('-p', ls.wppath + '/wp-content/config');
 		
 		src = pwd + '/bootstrap/wpbase_settings.json';
 		trg = ls.wppath + '/wp-content/config/wpbase_settings.json';
