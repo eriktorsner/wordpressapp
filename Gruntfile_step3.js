@@ -34,7 +34,7 @@ module.exports = function(grunt) {
 		if(!shell.test('-e', ls.wppath + '/wp-config.php')) {
 			shell.exec(wpcmd + 'core download --force');
 			shell.exec(wpcmd + 'core config --dbname=' + ls.dbname + ' --dbuser=' + ls.dbuser + ' --dbpass=' + ls.dbpass + ' --quiet');
-			shell.exec(wpcmd + 'core install --url=' + ls.url + ' --title="Tracker.social" --admin_name=admin --admin_email="admin@local.dev" --admin_password="password"');
+			shell.exec(wpcmd + 'core install --url=' + ls.url + ' --title="WordPress App" --admin_name=' + ls.wpuser + ' --admin_email="admin@local.dev" --admin_password="' + ls.wppass + '"');
 		} else {
 			grunt.log.write('Wordpress is already installed').ok();
 		}
