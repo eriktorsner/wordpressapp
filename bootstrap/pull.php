@@ -10,8 +10,13 @@ $bootstrapSettings = json_decode(file_get_contents(__DIR__.'/settings.json'));
 require_once $localSettings->wppath."/wp-load.php";
 require_once __DIR__."/src/Resolver.php";
 global $wpdb;
+$uploadDir = wp_upload_dir();
 $baseUrl = get_option('siteurl');
 $neutralUrl = 'NEUTRALURL';
+
+recursiveRemoveDirectory(__DIR__.'/pages/');
+recursiveRemoveDirectory(__DIR__.'/media/');
+recursiveRemoveDirectory(__DIR__.'/menus/');
 
 // pages
 foreach ($bootstrapSettings->pages as $page) {
@@ -28,6 +33,22 @@ foreach ($bootstrapSettings->pages as $page) {
     $pageContent = $wpdb->get_var($wpdb->prepare("SELECT post_content FROM $wpdb->posts WHERE id = %s", $pageId));
     Resolver::field_search_replace($pageContent, $baseUrl, $neutralUrl);
     file_put_contents($dir.'/content', $pageContent);
+}
+
+// media for pages
+foreach ($bootstrapSettings->pages as $page) {
+    $pageId = $wpdb->get_var($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_name = %s", $page));
+    $media = get_attached_media('', $pageId);
+    foreach ($media as $item) {
+        $itemMeta = wp_get_attachment_metadata($item->ID, true);
+        $item->meta = $itemMeta;
+        $dir = __DIR__.'/media/'.$item->post_name;
+        @mkdir($dir, 0777, true);
+        file_put_contents($dir.'/meta', serialize($item));
+        $src = $uploadDir['basedir'].'/'.$itemMeta['file'];
+        $trg = $dir.'/'.basename($itemMeta['file']);
+        copy($src, $trg);
+    }
 }
 
 //menus
@@ -49,4 +70,16 @@ foreach ($bootstrapSettings->menus as $menu) {
         Resolver::field_search_replace($obj, $baseUrl, $neutralUrl);
         file_put_contents($file, serialize($obj));
     }
+}
+
+function recursiveRemoveDirectory($directory)
+{
+    foreach (glob("{$directory}/*") as $file) {
+        if (is_dir($file)) {
+            recursiveRemoveDirectory($file);
+        } else {
+            unlink($file);
+        }
+    }
+    rmdir($directory);
 }

@@ -11,6 +11,7 @@ require_once $localSettings->wppath."/wp-load.php";
 require_once __DIR__."/src/Pushposts.php";
 require_once __DIR__."/src/Pushmenus.php";
 require_once __DIR__."/src/Resolver.php";
+require_once $localSettings->wppath."/wp-admin/includes/image.php";
 
 global $pages, $posts, $menus;
 
@@ -22,12 +23,13 @@ Resolver::resolveReferences();
 
 function findTargetPostId($target)
 {
-	global $pages;
+    global $pages;
 
-	foreach ($pages->posts as $page) {
-	    if ($page->meta->ID == $target) {
+    foreach ($pages->posts as $page) {
+        if ($page->meta->ID == $target) {
             return $page->id;
         }
     }
+
     return 0;
 }
