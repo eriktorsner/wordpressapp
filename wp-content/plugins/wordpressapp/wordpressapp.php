@@ -13,3 +13,8 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
+define('BASEPATH', dirname(dirname(dirname(__DIR__))));
+require_once(BASEPATH . '/vendor/autoload.php');
+
+$objLogging = new Wordpressapp\Logging;
+add_action( 'user_register', array($objLogging, 'LogUserRegister'), 10, 1 );
