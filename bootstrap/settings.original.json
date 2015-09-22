@@ -1,0 +1,24 @@
+{
+    "pages": ["start", "members", "about", "register", "welcome"],
+    "menus": [
+        {
+            "name": "main",
+            "location": "primary"
+        }
+    ],
+    "references": [
+        {
+            "option_name": "page_on_front"
+        },
+        {
+            "option_name": "rcp_settings",
+            "paths": [
+                "['registration_page']",
+                "['redirect']",
+                "['redirect_from_premium']",
+                "['ogin_redirect']"
+            ]
+        }
+    ]
+}
+
